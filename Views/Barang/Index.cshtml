@@ -1,0 +1,33 @@
+@{
+    ViewData["Title"] = "Master Barang";
+}
+
+@model IEnumerable<POSApplication.Models.Barang>
+
+<h1>Daftar Barang</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Nama</th>
+            <th>Harga Jual</th>
+            <th>Stok</th>
+            <th>Aksi</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var barang in Model)
+        {
+            <tr>
+                <td>@barang.Nama</td>
+                <td>@barang.HargaJual</td>
+                <td>@barang.Stok</td>
+                <td>
+                    <a href="/Barang/Edit/@barang.Id" class="btn btn-primary">Edit</a>
+                    <a href="/Barang/Delete/@barang.Id" class="btn btn-danger">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<a href="/Barang/Create" class="btn btn-success">Tambah Barang</a>

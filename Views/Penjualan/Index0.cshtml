@@ -1,0 +1,25 @@
+@model IEnumerable<POSApplication.Models.Penjualan>
+
+<h2>Daftar Penjualan</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Tanggal</th>
+            <th>Total Harga</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Id</td>
+                <td>@item.Tanggal</td>
+                <td>@item.TotalHarga</td>
+            </tr>
+        }
+    </tbody>
+</table> btn
+
+<a href="@Url.Action("Create", "Penjualan")" class="btn btn-primary">Tambah Penjualan</a>

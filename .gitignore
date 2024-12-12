@@ -1,0 +1,68 @@
+# .NET Core .gitignore
+
+# Build results
+bin/
+obj/
+
+# User-specific files
+*.user
+*.userosscache
+*.sln.docstates
+
+# Visual Studio
+.vscode/
+.vs/
+
+# Rider
+.idea/
+*.sln.iml
+
+# Logs
+*.log
+
+# IDE Settings
+*.suo
+*.ntvs*
+*.njsproj
+*.sln.ide
+
+# Configurations
+appsettings*.json
+!appsettings.json
+!appsettings.Development.json
+
+# Publish results
+wwwroot/**
+!wwwroot/index.html
+
+# Transient Dependency Graph
+project.lock.json
+
+# OS generated files
+Thumbs.db
+*.DS_Store
+
+# Paket dependency manager
+.paket/
+paket-files/
+
+# NuGet Packages
+*.nupkg
+
+# DotNet performance
+dotnet-performance/
+
+# JetBrains Rider
+.idea/
+.idea_modules/
+.idea/**/workspace.xml
+.idea/**/tasks.xml
+.idea/**/usage.statistics.xml
+.idea/**/dictionaries
+.idea/**/shelf
+.idea/**/workspace
+.idea/**/modules.xml
+.idea/**/output/**
+.idea/**/app.iml
+.idea/**/libs/**
+.idea/**/out/**

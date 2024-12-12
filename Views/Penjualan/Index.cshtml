@@ -1,0 +1,71 @@
+@model Penjualan
+@{
+    ViewBag.Title = "Tambah Penjualan";
+    var barangs = ViewBag.Barangs as List<Barang>;
+}
+
+<h1>Tambah Penjualan</h1>
+<form asp-action="Create" method="post">
+    <div>
+        <label for="tanggal">Tanggal:</label>
+        <input type="datetime-local" name="Tanggal" id="tanggal" required />
+    </div>
+
+    <h3>Detail Penjualan</h3>
+    <table id="detailPenjualan">
+        <thead>
+            <tr>
+                <th>Barang</th>
+                <th>Jumlah</th>
+                <th>Harga</th>
+                <th>Aksi</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    <select name="detailPenjualans[0].BarangId" required>
+                        <option value="">Pilih Barang</option>
+                        @foreach (var barang in barangs)
+                        {
+                            <option value="@barang.Id">@barang.Nama</option>
+                        }
+                    </select>
+                </td>
+                <td><input type="number" name="detailPenjualans[0].Jumlah" min="1" required /></td>
+                <td><input type="number" name="detailPenjualans[0].Harga" step="0.01" required /></td>
+                <td><button type="button" onclick="removeRow(this)">Hapus</button></td>
+            </tr>
+        </tbody>
+    </table>
+    <button type="button" onclick="addRow()">Tambah Barang</button>
+    <br /><br />
+    <button type="submit">Simpan</button>
+</form>
+
+@section Scripts {
+    <script>
+        let rowIndex = 1;
+        function addRow() {
+            const table = document.getElementById("detailPenjualan").getElementsByTagName("tbody")[0];
+            const newRow = table.rows[0].cloneNode(true);
+
+            const selects = newRow.querySelectorAll("select, input");
+            selects.forEach((input) => {
+                const name = input.name;
+                input.name = name.replace(/\[\d+\]/, `[${rowIndex}]`);
+                input.value = "";
+            });
+
+            table.appendChild(newRow);
+            rowIndex++;
+        }
+
+        function removeRow(button) {
+            const row = button.closest("tr");
+            if (row.parentElement.children.length > 1) {
+                row.remove();
+            }
+        }
+    </script>
+}

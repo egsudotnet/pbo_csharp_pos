@@ -1,0 +1,15 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome Egih Sugiatna,a M.Kom</h1>
+    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+</div>
+
+
+dotnet tool install --global dotnet-aspnet-codegenerator
+dotnet aspnet-codegenerator controller -name BarangController -async -m Barang -dc PBOPOSContext -outDir Controllers -udl
+
+PboPosContext
+dotnet aspnet-codegenerator controller -name BarangController -m Barang -dc PBOPOSContext --relativeFolderPath Controllers --useDefaultLayout --referenceScriptLibraries
