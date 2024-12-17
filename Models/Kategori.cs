@@ -3,13 +3,11 @@ using System.Collections.Generic;
 
 namespace POSApplication.Models;
 
-public partial class Barang
+public partial class Kategori
 {
     public int Id { get; set; }
 
     public string Nama { get; set; } = null!;
 
-    public decimal HargaJual { get; set; }
-
-    public int Stok { get; set; }
+    public string? Deskripsi { get; set; }
 }

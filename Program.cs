@@ -12,7 +12,8 @@ builder.Services.AddDbContext<PboPosContext>(options =>
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddScoped<IBarangService, BarangService>();
-builder.Services.AddScoped<IPenjualanService, PenjualanService>();
+builder.Services.AddScoped<IKategoriService, KategoriService>();
+// builder.Services.AddScoped<IPenjualanService, PenjualanService>();
 
 
 // Tambahkan layanan untuk MVC

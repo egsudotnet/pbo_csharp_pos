@@ -17,13 +17,11 @@ public partial class PboPosContext : DbContext
 
     public virtual DbSet<Barang> Barangs { get; set; }
 
-    public virtual DbSet<DetailPenjualan> DetailPenjualans { get; set; }
-
-    public virtual DbSet<Penjualan> Penjualans { get; set; }
+    public virtual DbSet<Kategori> Kategoris { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseNpgsql("Host=localhost:5432;Database=PBO_POS;Username=postgres;Password=berharap-YOGYA2#");
+        => optionsBuilder.UseNpgsql("Host=141.11.160.30:5432;Database=PBO_POS;Username=postgres;Password=berharap-YOGYA2#");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -33,38 +31,29 @@ public partial class PboPosContext : DbContext
 
             entity.ToTable("Barang");
 
-            entity.Property(e => e.Id).HasDefaultValueSql("nextval('barang_id_seq'::regclass)");
-            entity.Property(e => e.HargaJual).HasPrecision(10, 2);
-            entity.Property(e => e.Nama).HasMaxLength(100);
+            entity.Property(e => e.Id)
+                .HasDefaultValueSql("nextval('barang_id_seq'::regclass)")
+                .HasColumnName("id");
+            entity.Property(e => e.HargaJual)
+                .HasPrecision(10, 2)
+                .HasColumnName("hargaJual");
+            entity.Property(e => e.Nama)
+                .HasMaxLength(100)
+                .HasColumnName("nama");
+            entity.Property(e => e.Stok).HasColumnName("stok");
         });
 
-        modelBuilder.Entity<DetailPenjualan>(entity =>
+        modelBuilder.Entity<Kategori>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("DetailPenjualan_pkey");
+            entity.HasKey(e => e.Id).HasName("kategori_pkey");
 
-            entity.ToTable("DetailPenjualan");
+            entity.ToTable("kategori");
 
-            entity.Property(e => e.Harga).HasPrecision(18, 2);
-
-            entity.HasOne(d => d.Barang).WithMany(p => p.DetailPenjualans)
-                .HasForeignKey(d => d.BarangId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("DetailPenjualan_BarangId_fkey");
-
-            entity.HasOne(d => d.Penjualan).WithMany(p => p.DetailPenjualans)
-                .HasForeignKey(d => d.PenjualanId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("DetailPenjualan_PenjualanId_fkey");
-        });
-
-        modelBuilder.Entity<Penjualan>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("Penjualan_pkey");
-
-            entity.ToTable("Penjualan");
-
-            entity.Property(e => e.Tanggal).HasColumnType("timestamp without time zone");
-            entity.Property(e => e.TotalHarga).HasPrecision(18, 2);
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.Deskripsi).HasColumnName("deskripsi");
+            entity.Property(e => e.Nama)
+                .HasMaxLength(100)
+                .HasColumnName("nama");
         });
 
         OnModelCreatingPartial(modelBuilder);

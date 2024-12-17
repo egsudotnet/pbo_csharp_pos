@@ -1,0 +1,19 @@
+@model Kategori
+
+<h2>Hapus Kategori</h2>
+
+<h3>Apakah Anda yakin ingin menghapus kategori berikut?</h3>
+<div>
+    <dl class="dl-horizontal">
+        <dt>Nama Kategori</dt>
+        <dd>@Model.Nama</dd>
+        <dt>Deskripsi</dt>
+        <dd>@Model.Deskripsi</dd>
+    </dl>
+</div>
+
+<form asp-action="Delete" method="post">
+    <input type="hidden" asp-for="Id" />
+    <button type="submit" class="btn btn-danger">Hapus</button>
+    <a asp-action="Index" class="btn btn-secondary">Batal</a>
+</form>
