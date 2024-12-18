@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using POSApplication.Models;
 using POSApplication.Services;
 
@@ -8,10 +9,14 @@ namespace POSApplication.Controllers
     public class BarangController : Controller
     {
         private readonly IBarangService _barangService;
+        private readonly IKategoriService _kategoriService;
 
-        public BarangController(IBarangService barangService)
+        [ActivatorUtilitiesConstructor]
+        public BarangController(IBarangService barangService, 
+                                IKategoriService kategoriService)
         {
             _barangService = barangService;
+            _kategoriService = kategoriService;
         }
 
         // READ: GET /Barang
@@ -22,8 +27,10 @@ namespace POSApplication.Controllers
         }
 
         // CREATE: GET /Barang/Create
-        public IActionResult Create()
-        {
+        public async Task<IActionResult> Create()
+        { 
+         
+            ViewBag.KategoriList = await GetSelectListAsync();
             return View();
         }
 
@@ -36,6 +43,8 @@ namespace POSApplication.Controllers
                 await _barangService.AddAsync(barang);
                 return RedirectToAction(nameof(Index));
             }
+
+            ViewBag.KategoriList = await GetSelectListAsync();         
             return View(barang);
         }
 
@@ -47,6 +56,10 @@ namespace POSApplication.Controllers
             {
                 return NotFound();
             }
+            
+            // Kirim data kategori ke View         
+            ViewBag.KategoriList = await GetSelectListAsync();
+
             return View(barang);
         }
 
@@ -59,6 +72,10 @@ namespace POSApplication.Controllers
                 await _barangService.UpdateAsync(barang);
                 return RedirectToAction(nameof(Index));
             }
+            
+            // Kirim data kategori ke View  
+            ViewBag.KategoriList = await GetSelectListAsync();
+
             return View(barang);
         }
 
@@ -80,5 +97,23 @@ namespace POSApplication.Controllers
             await _barangService.DeleteAsync(id);
             return RedirectToAction(nameof(Index));
         }
+
+        private async Task<List<SelectListItem>> GetSelectListAsync()
+        {
+            // Ambil data kategori dari service
+            var kategoriList = await _kategoriService.GetAllAsync();
+
+            // Konversi ke SelectListItem
+            var selectList = kategoriList.Select(k => new SelectListItem
+            {
+                Value = k.Id.ToString(),  // Properti ID kategori
+                Text = k.Nama             // Properti nama kategori
+            }).ToList();
+
+            return selectList;  // Kembalikan hasil
+        }
+
+
     }
+    
 }

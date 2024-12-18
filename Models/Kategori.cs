@@ -10,4 +10,6 @@ public partial class Kategori
     public string Nama { get; set; } = null!;
 
     public string? Deskripsi { get; set; }
+
+    public virtual ICollection<Barang> Barangs { get; set; } = new List<Barang>();
 }

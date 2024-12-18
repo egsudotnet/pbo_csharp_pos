@@ -12,4 +12,14 @@ public partial class Barang
     public decimal HargaJual { get; set; }
 
     public int Stok { get; set; }
+
+    public string Kode { get; set; } = null!;
+
+    public int? KategoriId { get; set; }
+
+    public virtual ICollection<DetailPenjualan> DetailPenjualans { get; set; } = new List<DetailPenjualan>();
+
+    public virtual Kategori? Kategori { get; set; }
 }
+
+

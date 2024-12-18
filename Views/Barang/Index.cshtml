@@ -9,6 +9,8 @@
 <table class="table">
     <thead>
         <tr>
+            <th>Kategori</th>
+            <th>Kode</th>
             <th>Nama</th>
             <th>Harga Jual</th>
             <th>Stok</th>
@@ -19,6 +21,8 @@
         @foreach (var barang in Model)
         {
             <tr>
+                <td>@barang.Kategori.Nama</td>
+                <td>@barang.Kode</td>
                 <td>@barang.Nama</td>
                 <td>@barang.HargaJual</td>
                 <td>@barang.Stok</td>

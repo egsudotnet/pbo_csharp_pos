@@ -14,7 +14,10 @@ namespace POSApplication.Services
 
         public async Task<IEnumerable<Barang>> GetAllAsync()
         {
-            return await _context.Barangs.ToListAsync();
+            var barangList = await _context.Barangs
+                .Include(b => b.Kategori) // Eager Loading relasi Kategori
+                .ToListAsync();
+            return barangList;
         }
 
         public async Task<Barang> GetByIdAsync(int id)
