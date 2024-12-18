@@ -11,9 +11,13 @@
             <label for="namaKategori">Nama Kategori</label>
             <input type="text" id="namaKategori" class="form-control" required />
         </div>
+        <div class="form-group">
+            <label for="namaKategori">Deskripsi</label>
+            <input type="text" id="deskripsi" class="form-control" required />
+        </div>
         </br>
         <button type="submit" class="btn btn-primary">Save</button>
-        <button type="button" id="resetForm" class="btn btn-secondary">Reset</button>
+        <button type="button" id="resetForm" class="btn btn-secondary" onclick="resetForm()">Reset</button>
     </form>
 </div>
 
@@ -24,8 +28,8 @@
     <table class="table" id="kategoriTable">
         <thead>
             <tr>
-                <th>Kode</th>
                 <th>Nama</th>
+                <th>Deskripsi</th>
                 <th>Aksi</th>
             </tr>
         </thead>
@@ -47,10 +51,10 @@
                     data.forEach(item => {
                         rows += `
                             <tr>
-                                <td>${item.kode}</td>
                                 <td>${item.nama}</td>
+                                <td>${item.deskripsi}</td>
                                 <td>
-                                    <button class="btn btn-sm btn-warning" onclick="editKategori(${item.id}, '${item.nama}')">Edit</button>
+                                    <button class="btn btn-sm btn-warning" onclick="editKategori(${item.id}, '${item.nama}', '${item.deskripsi}')">Edit</button>
                                     <button class="btn btn-sm btn-danger" onclick="deleteKategori(${item.id})">Delete</button>
                                 </td>
                             </tr>
@@ -66,7 +70,8 @@
             e.preventDefault();
             const id = $("#kategoriId").val();
             const nama = $("#namaKategori").val();
-            const data = { nama: nama };
+            const deskripsi = $("#deskripsi").val();
+            const data = { nama: nama, deskripsi: deskripsi };
 
             if (id) {
                 // Update
@@ -98,9 +103,10 @@
         });
 
         // Edit
-        function editKategori(id, nama) {
+        function editKategori(id, nama, deskripsi) {
             $("#kategoriId").val(id);
             $("#namaKategori").val(nama);
+            $("#deskripsi").val(deskripsi);
         }
 
         // Delete
@@ -119,8 +125,8 @@
 
         // Reset Form
         function resetForm() {
-            $("#kategoriId").val("");
             $("#namaKategori").val("");
+            $("#deskripsi").val("");
         }
 
         // Initial Load

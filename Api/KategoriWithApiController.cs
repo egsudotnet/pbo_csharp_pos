@@ -24,21 +24,21 @@ public class KategoriWithApiController : ControllerBase
         _kategoriService = kategoriService;
     }
 
-    [HttpGet("getAll")]
+    [HttpGet()]
     public async Task<IActionResult> GetAll()
     {
         var data = await _kategoriService.GetAllAsync();
         return Ok(data);
     }
 
-    [HttpPost("add")]
+    [HttpPost()]
     public async Task<IActionResult> Add([FromBody] Kategori kategori)
     {
         await _kategoriService.AddAsync(kategori);
         return Ok();
     }
 
-    [HttpPut("update/{id}")]
+    [HttpPut("{id}")]
     public async Task<IActionResult> Update(int id, [FromBody] Kategori kategori)
     {
         kategori.Id = id;
@@ -46,7 +46,7 @@ public class KategoriWithApiController : ControllerBase
         return Ok();
     }
 
-    [HttpDelete("delete/{id}")]
+    [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id)
     {
         await _kategoriService.DeleteAsync(id);
