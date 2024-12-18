@@ -1,0 +1,131 @@
+@{
+    ViewData["Title"] = "Manage Kategori";
+}
+
+<h1>Master Kategori</h1>
+
+<div>
+    <form id="kategoriForm">
+        <input type="hidden" id="kategoriId" />
+        <div class="form-group">
+            <label for="namaKategori">Nama Kategori</label>
+            <input type="text" id="namaKategori" class="form-control" required />
+        </div>
+        </br>
+        <button type="submit" class="btn btn-primary">Save</button>
+        <button type="button" id="resetForm" class="btn btn-secondary">Reset</button>
+    </form>
+</div>
+
+<hr />
+
+<div>
+ 
+    <table class="table" id="kategoriTable">
+        <thead>
+            <tr>
+                <th>Kode</th>
+                <th>Nama</th>
+                <th>Aksi</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Data will be populated via AJAX -->
+        </tbody>
+    </table>
+</div>
+
+@section Scripts {
+    <script>
+        // Load Data
+        function loadKategori() {
+            $.ajax({
+                url: "/api/KategoriWithApi",
+                method: "GET",
+                success: function (data) {
+                    let rows = "";
+                    data.forEach(item => {
+                        rows += `
+                            <tr>
+                                <td>${item.kode}</td>
+                                <td>${item.nama}</td>
+                                <td>
+                                    <button class="btn btn-sm btn-warning" onclick="editKategori(${item.id}, '${item.nama}')">Edit</button>
+                                    <button class="btn btn-sm btn-danger" onclick="deleteKategori(${item.id})">Delete</button>
+                                </td>
+                            </tr>
+                        `;
+                    });
+                    $("#kategoriTable tbody").html(rows);
+                }
+            });
+        }
+
+        // Add or Update
+        $("#kategoriForm").submit(function (e) {
+            e.preventDefault();
+            const id = $("#kategoriId").val();
+            const nama = $("#namaKategori").val();
+            const data = { nama: nama };
+
+            if (id) {
+                // Update
+                $.ajax({
+                    url: `/api/KategoriWithApi/${id}`,
+                    method: "PUT",
+                    contentType: "application/json",
+                    data: JSON.stringify(data),
+                    success: function () {
+                        alert("Kategori berhasil diperbarui!");
+                        resetForm();
+                        loadKategori();
+                    }
+                });
+            } else {
+                // Create
+                $.ajax({
+                    url: "/api/KategoriWithApi",
+                    method: "POST",
+                    contentType: "application/json",
+                    data: JSON.stringify(data),
+                    success: function () {
+                        alert("Kategori berhasil ditambahkan!");
+                        resetForm();
+                        loadKategori();
+                    }
+                });
+            }
+        });
+
+        // Edit
+        function editKategori(id, nama) {
+            $("#kategoriId").val(id);
+            $("#namaKategori").val(nama);
+        }
+
+        // Delete
+        function deleteKategori(id) {
+            if (confirm("Apakah Anda yakin ingin menghapus kategori ini?")) {
+                $.ajax({
+                    url: `/api/KategoriWithApi/${id}`,
+                    method: "DELETE",
+                    success: function () {
+                        alert("Kategori berhasil dihapus!");
+                        loadKategori();
+                    }
+                });
+            }
+        }
+
+        // Reset Form
+        function resetForm() {
+            $("#kategoriId").val("");
+            $("#namaKategori").val("");
+        }
+
+        // Initial Load
+        $(document).ready(function () {
+            loadKategori();
+        });
+    </script>
+}

@@ -8,6 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<PboPosContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("POSConnection")));
 
+
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
@@ -24,7 +25,24 @@ builder.Services.AddControllersWithViews()
     });
 
 
+// Tambahkan layanan untuk controller API
+builder.Services.AddControllers();
+// Mengaktifkan CORS
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", policy =>
+    {
+        policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+    });
+});
+
 var app = builder.Build();
+
+// Gunakan routing untuk API
+app.MapControllers();
+
+// Menggunakan CORS
+app.UseCors("AllowAll");
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

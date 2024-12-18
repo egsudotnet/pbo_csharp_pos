@@ -21,5 +21,3 @@ public partial class Barang
 
     public virtual Kategori? Kategori { get; set; }
 }
-
-

@@ -21,7 +21,7 @@
         @foreach (var barang in Model)
         {
             <tr>
-                <td>@barang.Kategori.Nama</td>
+                <td>@barang.Kategori?.Nama</td>
                 <td>@barang.Kode</td>
                 <td>@barang.Nama</td>
                 <td>@barang.HargaJual</td>
