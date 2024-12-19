@@ -27,16 +27,16 @@ obj/
 *.sln.ide
 
 # Configurations
-appsettings*.json
-!appsettings.json
-!appsettings.Development.json
+# appsettings*.json
+# !appsettings.json
+# !appsettings.Development.json
+
+appsettings.json
+models/PboPosContext.cs
 
 # Publish results
 wwwroot/**
 !wwwroot/index.html
-
-appsettings.json
-Models/PboPosContext.cs
 
 # Transient Dependency Graph
 project.lock.json
@@ -69,3 +69,4 @@ dotnet-performance/
 .idea/**/app.iml
 .idea/**/libs/**
 .idea/**/out/**
+
