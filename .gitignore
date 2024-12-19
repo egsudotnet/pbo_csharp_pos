@@ -35,6 +35,9 @@ appsettings*.json
 wwwroot/**
 !wwwroot/index.html
 
+appsettings.json
+Models/PboPosContext.cs
+
 # Transient Dependency Graph
 project.lock.json
 
