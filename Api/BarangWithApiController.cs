@@ -3,28 +3,31 @@ using Microsoft.AspNetCore.Mvc;
 using POSApplication.Models;
 using POSApplication.Services;
 
-[Route("[controller]/[action]")]
-public class BarangController : Controller
+// [Route("[controller]/[action]")]
+// // // [Route("api/[controller]")]
+[ApiController]
+[Route("api/[controller]")]
+public class BarangWithApiController : Controller
 {
     private readonly IBarangService _barangService;
 
-    public BarangController(IBarangService barangService)
+    public BarangWithApiController(IBarangService barangService)
     {
         _barangService = barangService;
     }
 
     [HttpGet]
-    public IActionResult GetAll()
+    public async Task<IActionResult> GetAll()
     {
-        var result = _barangService.GetAllAsync();
-        return Json(result);
+        var result = await _barangService.GetAllAsync();
+        return Ok(result);
     }
 
     [HttpGet("{id}")]
-    public IActionResult Get(int id)
+    public async Task<IActionResult> GetById(int id)
     {
-        var result = _barangService.GetByIdAsync(id);
-        return Json(result);
+        var result = await _barangService.GetByIdAsync(id);
+        return Ok(result);
     }
 
     [HttpPost]
@@ -34,7 +37,7 @@ public class BarangController : Controller
         return Ok();
     }
 
-    [HttpPost]
+    [HttpPut]
     public IActionResult Update([FromForm] Barang model)
     {
         _barangService.UpdateAsync(model);

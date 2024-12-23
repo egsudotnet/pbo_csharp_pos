@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace POSApplication.Models;
+namespace POSApplication.ViewModels;
 
-public partial class Barang
+public partial class BarangViewModel
 {
     public int Id { get; set; }
 
@@ -17,9 +17,8 @@ public partial class Barang
 
     public int? KategoriId { get; set; }
 
-    public virtual ICollection<DetailPenjualan> DetailPenjualans { get; set; } = new List<DetailPenjualan>();
-
-    public virtual Kategori? Kategori { get; set; }
+ 
+    public string? Kategori { get; set; }
 }
 
 

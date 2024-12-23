@@ -13,8 +13,8 @@ using POSApplication.Services;
 
 [ApiController]
 [Route("api/[controller]")]
-
 // // // [Route("api/kategori")] 
+ 
 public class KategoriWithApiController : ControllerBase
 {
     private readonly IKategoriService _kategoriService;
@@ -24,14 +24,14 @@ public class KategoriWithApiController : ControllerBase
         _kategoriService = kategoriService;
     }
 
-    [HttpGet()]
+    [HttpGet]
     public async Task<IActionResult> GetAll()
     {
         var data = await _kategoriService.GetAllAsync();
         return Ok(data);
     }
 
-    [HttpPost()]
+    [HttpPost]
     public async Task<IActionResult> Add([FromBody] Kategori kategori)
     {
         await _kategoriService.AddAsync(kategori);

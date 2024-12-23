@@ -2,15 +2,15 @@
     ViewData["Title"] = "Manage Kategori";
 }
 
-<h1>Master Kategori</h1>
+<h1>Master Barang</h1>
 
 <div class="container mt-5">
-    <h1>Barang CRUD</h1>
     <button id="btnAdd" class="btn btn-primary mb-3">Tambah Barang</button>
     <table class="table table-bordered">
         <thead>
             <tr>
                 <th>ID</th>
+                <th>Kode</th>
                 <th>Nama</th>
                 <th>Kategori</th>
                 <th>Harga Jual</th>
@@ -35,6 +35,12 @@
                 </div>
                 <div class="modal-body">
                     <input type="hidden" id="barangId" name="id">
+                    
+                    <div class="mb-3">
+                        <label for="kode" class="form-label">Kode</label>
+                        <input type="text" id="kode" name="kode" class="form-control" required>
+                    </div>
+
                     <div class="mb-3">
                         <label for="nama" class="form-label">Nama</label>
                         <input type="text" id="nama" name="nama" class="form-control" required>
@@ -73,16 +79,17 @@
             // Load data Barang
             function loadBarang() {
                 $.ajax({
-                    url: '/Barang/GetAll',
+                    url: '/api/BarangWithApi',
                     method: 'GET',
                     success: function (data) {
                         let rows = '';
-                        data.forEach(item => {
+                        data.forEach((item, index) => {
                             rows += `
                                 <tr>
-                                    <td>${item.id}</td>
+                                    <td>${index+1}</td>
+                                    <td>${item.kode}</td>
                                     <td>${item.nama}</td>
-                                    <td>${item.kategoriNama}</td>
+                                    <td>${item.kategori}</td>
                                     <td>${item.hargaJual}</td>
                                     <td>${item.stok}</td>
                                     <td>
@@ -100,7 +107,7 @@
             // Load kategori untuk dropdown
             function loadKategori() {
                 $.ajax({
-                    url: '/Kategori/GetAll',
+                    url: '/api/KategoriWithApi',
                     method: 'GET',
                     success: function (data) {
                         let options = '<option value="">Pilih Kategori</option>';
@@ -123,10 +130,10 @@
             $('#barangForm').on('submit', function (e) {
                 e.preventDefault();
                 const data = $(this).serialize();
-                const url = $('#barangId').val() ? '/Barang/Update' : '/Barang/Create';
+                const url = '/api/BarangWithApi';
                 $.ajax({
                     url: url,
-                    method: 'POST',
+                    method:  $('#barangId').val() ? 'PUT' : 'POST',
                     data: data,
                     success: function () {
                         barangModal.hide();
@@ -139,10 +146,11 @@
             $(document).on('click', '.btnEdit', function () {
                 const id = $(this).data('id');
                 $.ajax({
-                    url: `/Barang/Get/${id}`,
+                    url: `/api/BarangWithApi/${id}`,
                     method: 'GET',
                     success: function (data) {
                         $('#barangId').val(data.id);
+                        $('#kode').val(data.kode);
                         $('#nama').val(data.nama);
                         $('#kategoriId').val(data.kategoriId);
                         $('#hargaJual').val(data.hargaJual);
@@ -157,8 +165,8 @@
                 const id = $(this).data('id');
                 if (confirm('Apakah Anda yakin ingin menghapus barang ini?')) {
                     $.ajax({
-                        url: `/Barang/Delete/${id}`,
-                        method: 'POST',
+                        url: `/api/BarangWithApi/${id}`,
+                        method: 'delete',
                         success: function () {
                             loadBarang();
                         }

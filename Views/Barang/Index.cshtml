@@ -2,7 +2,7 @@
     ViewData["Title"] = "Master Barang";
 }
 
-@model IEnumerable<POSApplication.Models.Barang>
+@model IEnumerable<POSApplication.ViewModels.BarangViewModel>
 
 <h1>Daftar Barang</h1>
 
@@ -21,7 +21,7 @@
         @foreach (var barang in Model)
         {
             <tr>
-                <td>@barang.Kategori?.Nama</td>
+                <td>@barang.Kategori</td>
                 <td>@barang.Kode</td>
                 <td>@barang.Nama</td>
                 <td>@barang.HargaJual</td>

@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using POSApplication.Models;
+using POSApplication.ViewModels;
+
 
 namespace POSApplication.Services
 {
@@ -12,18 +14,48 @@ namespace POSApplication.Services
             _context = context;
         }
 
-        public async Task<IEnumerable<Barang>> GetAllAsync()
+        public async Task<IEnumerable<BarangViewModel>> GetAllAsync()
         {
             var barangList = await _context.Barangs
                 .Include(b => b.Kategori) // Eager Loading relasi Kategori
                 .ToListAsync();
-            return barangList;
+
+            // Map ke BarangViewModel
+            var result = barangList.Select(b => new BarangViewModel
+            { 
+                Id = b.Id,
+                Nama = b.Nama,
+                HargaJual = b.HargaJual,
+                Stok = b.Stok,
+                Kode = b.Kode,
+                KategoriId = b.KategoriId,
+                Kategori = b.Kategori?.Nama // Ambil nama kategori
+            });
+
+            return result;
         }
 
-        public async Task<Barang> GetByIdAsync(int id)
+
+        public async Task<BarangViewModel> GetByIdAsync(int id)
         {
-            return await _context.Barangs.FindAsync(id);
+            var barang = await _context.Barangs
+                .Include(b => b.Kategori)
+                .FirstOrDefaultAsync(b => b.Id == id);
+
+            if (barang == null) return null;
+
+            return new BarangViewModel
+            {
+                Id = barang.Id,
+                Nama = barang.Nama,
+                HargaJual = barang.HargaJual,
+                Stok = barang.Stok,
+                Kode = barang.Kode,
+                KategoriId = barang.KategoriId,
+                Kategori = barang.Kategori?.Nama
+            };
         }
+
 
         public async Task AddAsync(Barang barang)
         {
