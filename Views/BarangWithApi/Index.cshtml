@@ -1,0 +1,175 @@
+@{
+    ViewData["Title"] = "Manage Kategori";
+}
+
+<h1>Master Kategori</h1>
+
+<div class="container mt-5">
+    <h1>Barang CRUD</h1>
+    <button id="btnAdd" class="btn btn-primary mb-3">Tambah Barang</button>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nama</th>
+                <th>Kategori</th>
+                <th>Harga Jual</th>
+                <th>Stok</th>
+                <th>Aksi</th>
+            </tr>
+        </thead>
+        <tbody id="barangTableBody">
+            <!-- Rows will be populated dynamically -->
+        </tbody>
+    </table>
+</div>
+
+<!-- Modal Form -->
+<div class="modal fade" id="barangModal" tabindex="-1" aria-labelledby="barangModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form id="barangForm">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="barangModalLabel">Tambah Barang</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="barangId" name="id">
+                    <div class="mb-3">
+                        <label for="nama" class="form-label">Nama</label>
+                        <input type="text" id="nama" name="nama" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="kategoriId" class="form-label">Kategori</label>
+                        <select id="kategoriId" name="kategoriId" class="form-select" required>
+                            <!-- Options will be populated dynamically -->
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="hargaJual" class="form-label">Harga Jual</label>
+                        <input type="number" id="hargaJual" name="hargaJual" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="stok" class="form-label">Stok</label>
+                        <input type="number" id="stok" name="stok" class="form-control" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success">Simpan</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            const barangModal = new bootstrap.Modal('#barangModal');
+
+            // Load data Barang
+            function loadBarang() {
+                $.ajax({
+                    url: '/Barang/GetAll',
+                    method: 'GET',
+                    success: function (data) {
+                        let rows = '';
+                        data.forEach(item => {
+                            rows += `
+                                <tr>
+                                    <td>${item.id}</td>
+                                    <td>${item.nama}</td>
+                                    <td>${item.kategoriNama}</td>
+                                    <td>${item.hargaJual}</td>
+                                    <td>${item.stok}</td>
+                                    <td>
+                                        <button class="btn btn-warning btn-sm btnEdit" data-id="${item.id}">Edit</button>
+                                        <button class="btn btn-danger btn-sm btnDelete" data-id="${item.id}">Hapus</button>
+                                    </td>
+                                </tr>
+                            `;
+                        });
+                        $('#barangTableBody').html(rows);
+                    }
+                });
+            }
+
+            // Load kategori untuk dropdown
+            function loadKategori() {
+                $.ajax({
+                    url: '/Kategori/GetAll',
+                    method: 'GET',
+                    success: function (data) {
+                        let options = '<option value="">Pilih Kategori</option>';
+                        data.forEach(item => {
+                            options += `<option value="${item.id}">${item.nama}</option>`;
+                        });
+                        $('#kategoriId').html(options);
+                    }
+                });
+            }
+
+            // Tambah Barang
+            $('#btnAdd').on('click', function () {
+                $('#barangForm')[0].reset();
+                $('#barangId').val('');
+                barangModal.show();
+            });
+
+            // Simpan Barang
+            $('#barangForm').on('submit', function (e) {
+                e.preventDefault();
+                const data = $(this).serialize();
+                const url = $('#barangId').val() ? '/Barang/Update' : '/Barang/Create';
+                $.ajax({
+                    url: url,
+                    method: 'POST',
+                    data: data,
+                    success: function () {
+                        barangModal.hide();
+                        loadBarang();
+                    }
+                });
+            });
+
+            // Edit Barang
+            $(document).on('click', '.btnEdit', function () {
+                const id = $(this).data('id');
+                $.ajax({
+                    url: `/Barang/Get/${id}`,
+                    method: 'GET',
+                    success: function (data) {
+                        $('#barangId').val(data.id);
+                        $('#nama').val(data.nama);
+                        $('#kategoriId').val(data.kategoriId);
+                        $('#hargaJual').val(data.hargaJual);
+                        $('#stok').val(data.stok);
+                        barangModal.show();
+                    }
+                });
+            });
+
+            // Hapus Barang
+            $(document).on('click', '.btnDelete', function () {
+                const id = $(this).data('id');
+                if (confirm('Apakah Anda yakin ingin menghapus barang ini?')) {
+                    $.ajax({
+                        url: `/Barang/Delete/${id}`,
+                        method: 'POST',
+                        success: function () {
+                            loadBarang();
+                        }
+                    });
+                }
+            });
+
+            // Inisialisasi
+            loadBarang();
+            loadKategori();
+        });
+
+    </script>
+}
